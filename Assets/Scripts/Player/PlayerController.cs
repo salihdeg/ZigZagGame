@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -12,7 +11,9 @@ namespace Player
         [SerializeField] private float _speedDifficultiy = 0.01f;
         [SerializeField] private float _score = 0;
         [SerializeField] private float _incermentValue = 1f;
-        [SerializeField] private TextMeshProUGUI _scoreText;
+        [SerializeField] private TextMeshProUGUI _scoreText, _bestScoreText;
+
+        public int _bestScore = 0;
 
         private GroundSpawner _groundSpawner;
 
@@ -26,6 +27,12 @@ namespace Player
         {
             _groundSpawner = GetComponentInChildren<GroundSpawner>();
             _dir = Vector3.forward;
+        }
+
+        private void Start()
+        {
+            _bestScore = PlayerPrefs.GetInt("BestScore", 0);
+            _bestScoreText.text = "Best: " + _bestScore;
         }
 
         private void Update()
@@ -42,6 +49,11 @@ namespace Player
             if (transform.position.y < 0.2f)
             {
                 isDead = true;
+                if (_bestScore < _score)
+                {
+                    _bestScore = (int)_score;
+                    PlayerPrefs.SetInt("BestScore", _bestScore);
+                }
                 Destroy(gameObject, 1f);
             }
         }
@@ -84,7 +96,7 @@ namespace Player
         private void Move() // Change player position
         {
             //transform.Translate(_speed * Time.deltaTime * _dir); // move
-            _speed += Time.deltaTime * _speed * _speedDifficultiy; 
+            _speed += Time.deltaTime * _speed * _speedDifficultiy;
             Vector3 move = _speed * Time.deltaTime * _dir;
             transform.position += move;
         }
