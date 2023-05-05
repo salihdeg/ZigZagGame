@@ -33,6 +33,7 @@ namespace Player
             if (collision.gameObject.CompareTag(GROUND_TAG))
             {
                 _groundSpawner.CreateGround();
+                DestroyGround(collision.gameObject);
             }
         }
 
@@ -58,6 +59,11 @@ namespace Player
             //transform.Translate(_speed * Time.deltaTime * _dir); // move
             Vector3 move = _speed * Time.deltaTime * _dir;
             transform.position += move;
+        }
+
+        private void DestroyGround(GameObject ground)
+        {
+            Destroy(ground, 0.5f);
         }
     }
 }
