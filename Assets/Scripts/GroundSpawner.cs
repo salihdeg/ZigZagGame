@@ -6,13 +6,13 @@ public class GroundSpawner : MonoBehaviour
 
     private void Start()
     {
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 15; i++)
         {
             CreateGround();
         }
     }
 
-    private void CreateGround()
+    public void CreateGround()
     {
         Vector3 dir;
 
