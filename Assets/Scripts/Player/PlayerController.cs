@@ -4,7 +4,7 @@ namespace Player
 {
     public class PlayerController : MonoBehaviour
     {
-        [SerializeField] private float _speed = 10f;
+        [SerializeField] private float _speed = 5f;
 
         private Vector3 _dir;
         private bool _dirChanged = false;
