@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Player
@@ -33,7 +35,7 @@ namespace Player
             if (collision.gameObject.CompareTag(GROUND_TAG))
             {
                 _groundSpawner.CreateGround();
-                DestroyGround(collision.gameObject);
+                StartCoroutine(DestroyGround(collision.gameObject));
             }
         }
 
@@ -61,10 +63,12 @@ namespace Player
             transform.position += move;
         }
 
-        private void DestroyGround(GameObject ground)
+        private IEnumerator DestroyGround(GameObject ground)
         {
-            Destroy(ground, 0.5f);
+            yield return new WaitForSeconds(0.5f);
+            Destroy(ground);
         }
+
     }
 }
 
