@@ -35,7 +35,7 @@ namespace Player
             if (transform.position.y < 0.2f)
             {
                 isDead = true;
-                Destroy(gameObject, 2f);
+                Destroy(gameObject, 1f);
             }
         }
 
