@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 namespace Player
@@ -8,6 +10,10 @@ namespace Player
     {
         [SerializeField] private float _speed = 1f;
         [SerializeField] private float _speedDifficultiy = 0.01f;
+        [SerializeField] private float _score = 0;
+        [SerializeField] private float _incermentValue = 1f;
+        [SerializeField] private TextMeshProUGUI _scoreText;
+
         private GroundSpawner _groundSpawner;
 
         private Vector3 _dir;
@@ -42,7 +48,11 @@ namespace Player
 
         private void FixedUpdate()
         {
+            if (isDead) return;
+
             Move();
+            AddScore();
+            SetScore();
         }
 
         private void OnCollisionExit(Collision collision)
@@ -74,7 +84,7 @@ namespace Player
         private void Move() // Change player position
         {
             //transform.Translate(_speed * Time.deltaTime * _dir); // move
-            _speed += Time.deltaTime + _speedDifficultiy; 
+            _speed += Time.deltaTime * _speed * _speedDifficultiy; 
             Vector3 move = _speed * Time.deltaTime * _dir;
             transform.position += move;
         }
@@ -86,6 +96,16 @@ namespace Player
 
             yield return new WaitForSeconds(1.5f);
             Destroy(ground);
+        }
+
+        private void SetScore()
+        {
+            _scoreText.text = "Score: " + ((int)_score).ToString();
+        }
+
+        private void AddScore()
+        {
+            _score += _incermentValue * Time.deltaTime;
         }
 
     }
