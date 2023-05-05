@@ -11,6 +11,7 @@ namespace Player
 
         private Vector3 _dir;
         private bool _dirChanged = false;
+        public static bool isDead = false;
 
         private readonly string GROUND_TAG = "Ground";
 
@@ -22,7 +23,20 @@ namespace Player
 
         private void Update()
         {
+            if (isDead) return;
+
             ChangeMoveDirection();
+
+            CheckFalling();
+        }
+
+        private void CheckFalling()
+        {
+            if (transform.position.y < 0.2f)
+            {
+                isDead = true;
+                Destroy(gameObject, 2f);
+            }
         }
 
         private void FixedUpdate()
@@ -65,7 +79,10 @@ namespace Player
 
         private IEnumerator DestroyGround(GameObject ground)
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(.3f);
+            ground.AddComponent<Rigidbody>();
+
+            yield return new WaitForSeconds(1.5f);
             Destroy(ground);
         }
 
