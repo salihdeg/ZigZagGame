@@ -7,11 +7,17 @@ namespace Player
 {
     public class PlayerController : MonoBehaviour
     {
+        [Header("Attributes")]
         [SerializeField] private float _speed = 1f;
         [SerializeField] private float _speedDifficultiy = 0.01f;
         [SerializeField] private float _score = 0;
         [SerializeField] private float _incermentValue = 1f;
-        [SerializeField] private TextMeshProUGUI _scoreText, _bestScoreText;
+
+        [Header("Outer Components")]
+        [SerializeField] private TextMeshProUGUI _scoreText;
+        [SerializeField] private TextMeshProUGUI _bestScoreText;
+        [SerializeField] private GameObject _restartPanel;
+        [SerializeField] private GameObject _startPanel;
 
         public int _bestScore = 0;
 
