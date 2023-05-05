@@ -393,6 +393,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sonZemin: {fileID: 1587367877}
+  _spawnParent: {fileID: 304772985}
 --- !u!1 &1587367877
 GameObject:
   m_ObjectHideFlags: 0
@@ -602,7 +603,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92a5046d4fac944cfadbb36fa95cf5b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 1
+  _speed: 21
 --- !u!54 &1687774082
 Rigidbody:
   m_ObjectHideFlags: 0

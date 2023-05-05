@@ -3,6 +3,7 @@ using UnityEngine;
 public class GroundSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject _sonZemin;
+    [SerializeField] private Transform _spawnParent;
 
     private void Start()
     {
@@ -16,7 +17,7 @@ public class GroundSpawner : MonoBehaviour
     {
         Vector3 dir;
 
-        if (Random.Range(0,2) == 0) // 0 gelirse -x ekseninde zemin oluştur
+        if (Random.Range(0, 2) == 0) // 0 gelirse -x ekseninde zemin oluştur
         {
             dir = Vector3.left;
         }
@@ -25,6 +26,6 @@ public class GroundSpawner : MonoBehaviour
             dir = Vector3.forward;
         }
 
-        _sonZemin = Instantiate(_sonZemin, _sonZemin.transform.position + dir, _sonZemin.transform.rotation);
+        _sonZemin = Instantiate(_sonZemin, _sonZemin.transform.position + dir, _sonZemin.transform.rotation, _spawnParent);
     }
 }
