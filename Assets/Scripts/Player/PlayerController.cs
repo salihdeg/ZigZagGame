@@ -5,12 +5,16 @@ namespace Player
     public class PlayerController : MonoBehaviour
     {
         [SerializeField] private float _speed = 5f;
+        private GroundSpawner _groundSpawner;
 
         private Vector3 _dir;
         private bool _dirChanged = false;
 
+        private readonly string GROUND_TAG = "Ground";
+
         private void Awake()
         {
+            _groundSpawner = GetComponentInChildren<GroundSpawner>();
             _dir = Vector3.forward;
         }
 
@@ -22,6 +26,14 @@ namespace Player
         private void FixedUpdate()
         {
             Move();
+        }
+
+        private void OnCollisionExit(Collision collision)
+        {
+            if (collision.gameObject.CompareTag(GROUND_TAG))
+            {
+                _groundSpawner.CreateGround();
+            }
         }
 
         private void ChangeMoveDirection() // if mouse touched, change direction
