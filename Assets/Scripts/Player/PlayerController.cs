@@ -4,7 +4,7 @@ namespace Player
 {
     public class PlayerController : MonoBehaviour
     {
-        [SerializeField] private float _speed = 5f;
+        [SerializeField] private float _speed = 2f;
         private GroundSpawner _groundSpawner;
 
         private Vector3 _dir;
