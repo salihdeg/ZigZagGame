@@ -25,7 +25,7 @@ namespace Player
 
         private Vector3 _dir;
         private bool _dirChanged = false;
-        public static bool isDead = false;
+        public static bool isDead = true;
 
         private readonly string GROUND_TAG = "Ground";
 
@@ -37,6 +37,12 @@ namespace Player
 
         private void Start()
         {
+            if (RestartGame.isRestart)
+            {
+                _startPanel.SetActive(false);
+                isDead = false;
+            }
+
             _bestScore = PlayerPrefs.GetInt("BestScore", 0);
             _bestScoreText.text = "Best: " + _bestScore;
         }
@@ -60,6 +66,8 @@ namespace Player
                     _bestScore = (int)_score;
                     PlayerPrefs.SetInt("BestScore", _bestScore);
                 }
+                _restartPanel.SetActive(true);
+
                 Destroy(gameObject, 1f);
             }
         }
@@ -70,7 +78,7 @@ namespace Player
 
             Move();
             AddScore();
-            SetScore();
+            SetScoreText();
         }
 
         private void OnCollisionExit(Collision collision)
@@ -81,6 +89,17 @@ namespace Player
                 StartCoroutine(DestroyGround(collision.gameObject));
             }
         }
+
+        //Public Functions
+
+        public void StartGame()
+        {
+            _startPanel.SetActive(false);
+            isDead = false;
+        }
+
+
+        // Private Functions
 
         private void ChangeMoveDirection() // if mouse touched, change direction
         {
@@ -107,7 +126,7 @@ namespace Player
             transform.position += move;
         }
 
-        private IEnumerator DestroyGround(GameObject ground)
+        private IEnumerator DestroyGround(GameObject ground) //Fall and destroy ground in time
         {
             yield return new WaitForSeconds(.3f);
             ground.AddComponent<Rigidbody>();
@@ -116,7 +135,7 @@ namespace Player
             Destroy(ground);
         }
 
-        private void SetScore()
+        private void SetScoreText()
         {
             _scoreText.text = "Score: " + ((int)_score).ToString();
         }
