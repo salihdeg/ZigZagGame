@@ -12,6 +12,8 @@ public class FollowCamera : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (Player.PlayerController.isDead) return;
+
         transform.position = _playerT.position + _camDistance;
     }
 
