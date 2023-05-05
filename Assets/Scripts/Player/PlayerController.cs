@@ -6,7 +6,8 @@ namespace Player
 {
     public class PlayerController : MonoBehaviour
     {
-        [SerializeField] private float _speed = 2f;
+        [SerializeField] private float _speed = 1f;
+        [SerializeField] private float _speedDifficultiy = 0.01f;
         private GroundSpawner _groundSpawner;
 
         private Vector3 _dir;
@@ -73,6 +74,7 @@ namespace Player
         private void Move() // Change player position
         {
             //transform.Translate(_speed * Time.deltaTime * _dir); // move
+            _speed += Time.deltaTime + _speedDifficultiy; 
             Vector3 move = _speed * Time.deltaTime * _dir;
             transform.position += move;
         }
