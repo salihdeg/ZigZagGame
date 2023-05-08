@@ -4,6 +4,7 @@ public class GroundSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject _sonZemin;
     [SerializeField] private Transform _spawnParent;
+    [SerializeField] private GameObject _gold;
 
     private void Start()
     {
@@ -25,7 +26,30 @@ public class GroundSpawner : MonoBehaviour
         {
             dir = Vector3.forward;
         }
+        
+        GameObject newObject = Instantiate(_sonZemin, _sonZemin.transform.position + dir, _sonZemin.transform.rotation, _spawnParent);
 
-        _sonZemin = Instantiate(_sonZemin, _sonZemin.transform.position + dir, _sonZemin.transform.rotation, _spawnParent);
+        DestroyAllChilds(newObject.transform);
+        CreateGoldRandom(newObject.transform);
+        newObject.name = "Ground";
+
+        _sonZemin = newObject;
+    }
+
+    public void DestroyAllChilds(Transform comingTransform)
+    {
+        if (comingTransform.childCount > 0)
+            foreach (Transform item in comingTransform)
+                Destroy(item.gameObject);
+    }
+
+    public void CreateGoldRandom(Transform newGround)
+    {
+        int randomNumber = Random.Range(0, 2);
+
+        if (randomNumber == 1)
+        {
+            Instantiate(_gold, newGround);
+        }
     }
 }
