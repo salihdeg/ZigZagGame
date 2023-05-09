@@ -9,22 +9,25 @@ namespace Player
     {
         [Header("Attributes")]
         [SerializeField] private float _speed = 1f;
-        [SerializeField] private float _speedDifficultiy = 0.01f;
+        [SerializeField] private float _speedDifficultiy = 0.001f;
         [SerializeField] private float _score = 0;
         [SerializeField] private float _incermentValue = 1f;
 
         [Header("Outer Components")]
         [SerializeField] private TextMeshProUGUI _scoreText;
         [SerializeField] private TextMeshProUGUI _bestScoreText;
+        [SerializeField] private TextMeshProUGUI _StartBestScoreText;
         [SerializeField] private GameObject _restartPanel;
         [SerializeField] private GameObject _startPanel;
+        [SerializeField] private Animator _newHighScoreAnimator;
 
         public int _bestScore = 0;
 
         private GroundSpawner _groundSpawner;
-
+        private int _lastScoreCheck = 0;
         private Vector3 _dir;
         private bool _dirChanged = false;
+        private bool _isNewHighScore = false;
         public static bool isDead = true;
 
         private readonly string GROUND_TAG = "Ground";
@@ -45,6 +48,7 @@ namespace Player
 
             _bestScore = PlayerPrefs.GetInt("BestScore", 0);
             _bestScoreText.text = "Best: " + _bestScore;
+            _StartBestScoreText.text = "Best Score: " + _bestScore;
         }
 
         private void Update()
@@ -54,22 +58,10 @@ namespace Player
             ChangeMoveDirection();
 
             CheckFalling();
-        }
 
-        private void CheckFalling()
-        {
-            if (transform.position.y < 0.2f)
-            {
-                isDead = true;
-                if (_bestScore < _score)
-                {
-                    _bestScore = (int)_score;
-                    PlayerPrefs.SetInt("BestScore", _bestScore);
-                }
-                _restartPanel.SetActive(true);
+            CheckNewHighScore();
 
-                Destroy(gameObject, 1f);
-            }
+            IfScoreMod30();
         }
 
         private void FixedUpdate()
@@ -77,8 +69,19 @@ namespace Player
             if (isDead) return;
 
             Move();
-            AddScore();
+            //AddScore();
             SetScoreText();
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (isDead) return;
+
+            if (other.CompareTag("Gold"))
+            {
+                Destroy(other.gameObject);
+                AddScore();
+            }
         }
 
         private void OnCollisionExit(Collision collision)
@@ -100,6 +103,21 @@ namespace Player
 
 
         // Private Functions
+        private void CheckFalling()
+        {
+            if (transform.position.y < 0.2f)
+            {
+                isDead = true;
+                if (_bestScore < _score)
+                {
+                    _bestScore = (int)_score;
+                    PlayerPrefs.SetInt("BestScore", _bestScore);
+                }
+                _restartPanel.SetActive(true);
+
+                Destroy(gameObject, 1f);
+            }
+        }
 
         private void ChangeMoveDirection() // if mouse touched, change direction
         {
@@ -142,7 +160,30 @@ namespace Player
 
         private void AddScore()
         {
-            _score += _incermentValue * Time.deltaTime;
+            //_score += _incermentValue * Time.deltaTime;
+            _score += 1;
+        }
+
+        private void IfScoreMod30()
+        {
+            if ((int)_score / 30 > _lastScoreCheck && (int)_score != 0 && _bestScore != 0) // 30'a bölümünden kalan 0'sa
+            {
+                _speed += 0.15f;
+                _incermentValue += 0.2f;
+                _lastScoreCheck++;
+            }
+        }
+
+        private void CheckNewHighScore()
+        {
+            if (!_isNewHighScore)
+            {
+                if (_score > _bestScore)
+                {
+                    _newHighScoreAnimator.SetTrigger("NewHighScore");
+                    _isNewHighScore = true;
+                }
+            }
         }
 
     }
